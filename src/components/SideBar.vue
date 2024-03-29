@@ -7,15 +7,17 @@
           <template v-for="(item, index) in menuItems" :key="index">
             <li class="list-group-item" @click="toggleExpand(item)" :class="{ 'active': isSameBranch(activeItem, item) }">
               <span :class="{ 'highlighted': isHighlighted(item) }">{{ item.text }}</span>
-              <ul v-if="item.expanded" class="list-group">
-                <li v-for="(child, childIndex) in item.children" :key="childIndex" class="list-group-item" @click.stop="toggleExpand(child)">
-                  <span :class="{ 'highlighted': isHighlighted(child) }">{{ child.text }}</span>
-                  <ul v-if="child.expanded" class="list-group">
-                    <li v-for="(subChild, subChildIndex) in child.children" :key="subChildIndex" class="list-group-item" @click.stop="toggleExpand(subChild)">
-                      <span :class="{ 'highlighted': isHighlighted(subChild) }">{{ subChild.text }}</span>
-                    </li>
-                  </ul>
-                </li>
+              <ul v-if="item.children && item.expanded" class="list-group">
+                <template v-for="(child, childIndex) in item.children" :key="childIndex">
+                  <li class="list-group-item" @click.stop="toggleExpand(child)">
+                    <span :class="{ 'highlighted': isHighlighted(child) }">{{ child.text }}</span>
+                    <ul v-if="child.children && child.expanded" class="list-group">
+                      <li class="list-group-item" v-for="(subChild, subChildIndex) in child.children" :key="subChildIndex" @click.stop="toggleExpand(subChild)">
+                        <span :class="{ 'highlighted': isHighlighted(subChild) }">{{ subChild.text }}</span>
+                      </li>
+                    </ul>
+                  </li>
+                </template>
               </ul>
             </li>
           </template>
